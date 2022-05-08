@@ -15,7 +15,7 @@ steps:
     resourceGroupName: 'dan-rg-nothing'
     location: 'Central US'
     templateLocation: 'Linked artifact'
-    csmFile: './AzureLearning/azuredeploy.json'
+    csmFile: './Infrastructure/azuredeploy.json'
     deploymentMode: 'Complete'
 # Start with a minimal pipeline that you can customize to build and deploy your code.
 # Add steps that build, run tests, deploy, and more:
