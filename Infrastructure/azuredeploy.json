@@ -30,7 +30,7 @@
         {
             "type": "Microsoft.Storage/storageAccounts",
             "apiVersion": "2021-08-01",
-            "name":  "[concat('sa-', variables('basename'), '-', parameters('location'))]",
+            "name":  "[concat('sa', variables('basename'), parameters('location'))]",
             "location": "[parameters('location')]", 
             "kind": "BlobStorage",
             "sku": {
