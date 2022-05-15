@@ -33,10 +33,6 @@
             "name":  "[concat('sa', variables('basename'), parameters('location'))]",
             "location": "[parameters('location')]", 
             "kind": "BlobStorage",
-            "sku": {
-                "name": "Standard_ZRS",
-                "tier": "Standard"
-            },
             "properties": {
                 "accessTier": "Cool"
             }
