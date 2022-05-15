@@ -32,10 +32,20 @@
             "apiVersion": "2021-08-01",
             "name":  "[concat('sa', variables('basename'), parameters('location'))]",
             "location": "[parameters('location')]", 
-            "kind": "BlobStorage",
-            "properties": {
-                "accessTier": "Cool"
-            }
+            "kind": "StorageV2",
+            "sku": {
+                "name": "Standard_ZRS"
+            },
+            "resources": [
+                {
+                    "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
+                    "apiVersion": "2021-09-01",
+                    "name": "[concat('sa', variables('basename'), parameters('location'), '/default/', 'container1')]",
+                    "properties": {
+                        "publicAccess": "none"
+                    }
+                }
+            ]
         },
         {
             "type": "Microsoft.EventGrid/topics",
