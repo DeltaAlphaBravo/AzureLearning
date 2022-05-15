@@ -2,13 +2,6 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "eventGridTopicName": {
-            "type": "string",
-            "defaultValue": "[format('topic-{0}', uniqueString(resourceGroup().id))]",
-            "metadata": {
-                "description": "The name of the Event Grid custom topic."
-            }
-        },
         // "eventGridSubscriptionName": {
         //     "type": "string",
         //     "defaultValue": "[format('sub-{0}', uniqueString(resourceGroup().id))]",
@@ -30,11 +23,25 @@
             }
         }
     },
+    "variables": {
+        "basename": "danlearn"
+    },
     "resources": [
+        {
+            "type": "Microsoft.Storage/storageAccounts",
+            "apiVersion": "2021-08-01",
+            "name":  "[concat('sa-', variables('basename'), '-', parameters('location'))]",
+            "location": "[parameters('location')]", 
+            "kind": "BlobStorage",
+            "sku": {
+                "name": "Standard_ZRS",
+                "tier": "Standard"
+            }
+        },
         {
             "type": "Microsoft.EventGrid/topics",
             "apiVersion": "2020-06-01",
-            "name": "[parameters('eventGridTopicName')]",
+            "name":  "[concat('evg-', variables('basename'), '-', parameters('location'))]",
             "location": "[parameters('location')]"
         }//,
         // {
