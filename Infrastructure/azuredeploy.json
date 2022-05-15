@@ -25,7 +25,9 @@
     },
     "variables": {
         "basename": "danlearn",
-        "storageAccountName": "[concat('sa', variables('basename'), parameters('location'))]"
+        "storageAccountName": "[concat('sa', variables('basename'), parameters('location'))]",
+        "serviceBusName": "[concat('sb-', variables('basename'),'-', parameters('location'))]",
+        "eventGridName": "[concat('evg-', variables('basename'), '-', parameters('location'))]"
     },
     "resources": [
         {
@@ -52,27 +54,45 @@
             ]
         },
         {
+            "type": "Microsoft.ServiceBus/namespaces",
+            "apiVersion": "2021-11-01",
+            "name": "[variables('serviceBusName')]",
+            "properties": {
+                
+            }
+        },
+        {
+            "type": "Microsoft.ServiceBus/namespaces/queues",
+            "apiVersion": "2021-11-01",
+            "name": "[concat(variables('serviceBusName'), '/blobs')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.ServiceBus/namespaces', variables('serviceBusName'))]"
+            ]
+        },
+        {
             "type": "Microsoft.EventGrid/topics",
             "apiVersion": "2020-06-01",
-            "name":  "[concat('evg-', variables('basename'), '-', parameters('location'))]",
+            "name": "[variables('eventGridName')]",
             "location": "[parameters('location')]"
-        }//,
-        // {
-        //     "type": "Microsoft.EventGrid/eventSubscriptions",
-        //     "apiVersion": "2020-06-01",
-        //     "scope": "[format('Microsoft.EventGrid/topics/{0}', parameters('eventGridTopicName'))]",
-        //     "name": "[parameters('eventGridSubscriptionName')]",
-        //     "properties": {
-        //         "destination": {
-        //             "endpointType": "WebHook",
-        //             "properties": {
-        //                 "endpointUrl": "[parameters('eventGridSubscriptionUrl')]"
-        //             }
-        //         }
-        //     },
-        //     "dependsOn": [
-        //         "[resourceId('Microsoft.EventGrid/topics', parameters('eventGridTopicName'))]"
-        //     ]
-        // }
+        },
+        {
+            "type": "Microsoft.EventGrid/eventSubscriptions",
+            "apiVersion": "2020-06-01",
+            "name": "BlobToQueue",
+            "properties": {
+                "deliveryAttributeMappings": [
+                  {
+                    "name": "string",
+                    "type": "string"
+                    // For remaining properties, see DeliveryAttributeMapping objects
+                  }
+                ],
+                "resourceId": "[resourceId('Microsoft.ServiceBus/namespaces/queues', concat(variables('serviceBusName'), '/blobs'))]"
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.EventGrid/topics', variables('eventGridName'))]",
+                "[resourceId('Microsoft.ServiceBus/namespaces/queues', variables('serviceBusName'), 'blobs')]"
+            ]
+        }
     ]
 }
