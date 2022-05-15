@@ -24,13 +24,14 @@
         }
     },
     "variables": {
-        "basename": "danlearn"
+        "basename": "danlearn",
+        "storageAccountName": "[concat('sa', variables('basename'), parameters('location'))]"
     },
     "resources": [
         {
             "type": "Microsoft.Storage/storageAccounts",
             "apiVersion": "2021-08-01",
-            "name":  "[concat('sa', variables('basename'), parameters('location'))]",
+            "name":  "[variables('storageAccountName')]",
             "location": "[parameters('location')]", 
             "kind": "StorageV2",
             "sku": {
@@ -40,10 +41,13 @@
                 {
                     "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
                     "apiVersion": "2021-09-01",
-                    "name": "[concat('sa', variables('basename'), parameters('location'), '/default/', 'container1')]",
+                    "name": "[concat(variables('storageAccountName'), '/default/', 'container1')]",
                     "properties": {
                         "publicAccess": "none"
-                    }
+                    },
+                    "dependsOn": [
+                         "[resourceId('Microsoft.Storage/storageAccounts/', variables('storageAccountName'))]"
+                    ]
                 }
             ]
         },
