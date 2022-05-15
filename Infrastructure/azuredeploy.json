@@ -36,6 +36,9 @@
             "sku": {
                 "name": "Standard_ZRS",
                 "tier": "Standard"
+            },
+            "properties": {
+                "accessTier": "Cool"
             }
         },
         {
