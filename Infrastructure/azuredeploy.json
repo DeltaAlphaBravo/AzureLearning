@@ -91,7 +91,7 @@
             },
             "dependsOn": [
                 "[resourceId('Microsoft.EventGrid/topics', variables('eventGridName'))]",
-                "[resourceId('Microsoft.ServiceBus/namespaces/queues', variables('serviceBusName'), 'blobs')]"
+                "[resourceId('Microsoft.ServiceBus/namespaces', variables('serviceBusName'))]"
             ]
         }
     ]
