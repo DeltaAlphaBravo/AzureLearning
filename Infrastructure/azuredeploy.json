@@ -82,14 +82,12 @@
             "name": "BlobToQueue",
             "endpointType": "ServiceBusQueue",
             "properties": {
-                "deliveryAttributeMappings": [
-                  {
-                    "name": "string",
-                    "type": "Dynamic"
-                    // For remaining properties, see DeliveryAttributeMapping objects
-                  }
-                ],
-                "resourceId": "[resourceId('Microsoft.ServiceBus/namespaces/queues', concat(variables('serviceBusName'), '/queues/blobs'))]"
+                "destination": {
+                    "properties": {
+                        "resourceId": "resourceId": "[resourceId('Microsoft.ServiceBus/namespaces/queues', concat(variables('serviceBusName'), '/queues/blobs'))]"
+                    },
+                    "endpointType": "ServiceBusQueue"
+                }
             },
             "dependsOn": [
                 "[resourceId('Microsoft.EventGrid/topics', variables('eventGridName'))]",
