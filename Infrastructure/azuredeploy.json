@@ -81,9 +81,9 @@
             "apiVersion": "2020-06-01",
             "name": "BlobToQueue",
             "properties": {
-                "destination": {
+                "destination": 
                     "properties": {
-                        "resourceId": "[resourceId('Microsoft.ServiceBus/namespaces/queues', concat(variables('serviceBusName'), '/queues/blobs'))]"
+                        "resourceId": "[concat(resourceId('Microsoft.ServiceBus/namespaces/queues', variables('serviceBusName'), '/queues/blobs')]"
                     },
                     "endpointType": "ServiceBusQueue"
                 }
