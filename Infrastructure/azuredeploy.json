@@ -57,6 +57,7 @@
             "type": "Microsoft.ServiceBus/namespaces",
             "apiVersion": "2021-11-01",
             "name": "[variables('serviceBusName')]",
+            "location": "[parameters('location')]", 
             "properties": {
                 
             }
