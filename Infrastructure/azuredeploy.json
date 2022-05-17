@@ -83,7 +83,7 @@
             "properties": {
                 "destination": {
                     "properties": {
-                        "resourceId": "[concat(resourceId('Microsoft.ServiceBus/namespaces/queues', variables('serviceBusName')), '/queues/blobs')]"
+                        "resourceId": "[concat(resourceId('Microsoft.ServiceBus/namespaces/queues', variables('serviceBusName'), 'blobs'))]"
                     },
                     "endpointType": "ServiceBusQueue"
                 }
