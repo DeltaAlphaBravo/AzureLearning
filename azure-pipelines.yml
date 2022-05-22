@@ -5,8 +5,27 @@ pool:
   vmImage: 'ubuntu-latest' 
 
 steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
+- script: |
+    dotnet restore
+    dotnet build --configuration Release
+- task: DotNetCoreCLI@2
+  inputs:
+    command: publish
+    arguments: '--configuration Release --output publish_output'
+    projects: '*.csproj'
+    publishWebProjects: false
+    modifyOutputPath: false
+    zipAfterPublish: false
+- task: ArchiveFiles@2
+  displayName: "Archive files"
+  inputs:
+    rootFolderOrFile: "$(System.DefaultWorkingDirectory)/publish_output"
+    includeRootFolder: false
+    archiveFile: "$(System.DefaultWorkingDirectory)/build$(Build.BuildId).zip"
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(System.DefaultWorkingDirectory)/build$(Build.BuildId).zip'
+    artifactName: 'drop'
 - task: AzureResourceManagerTemplateDeployment@3
   inputs:
     deploymentScope: 'Resource Group'
@@ -17,7 +36,13 @@ steps:
     location: 'East US'
     templateLocation: 'Linked artifact'
     csmFile: './Infrastructure/azuredeploy.json'
+    package: '$(System.DefaultWorkingDirectory)/build$(Build.BuildId).zip'
     deploymentMode: 'Complete'
+- task: AzureFunctionApp@1 # Add this at the end of your file
+  inputs:
+    azureSubscription: <Azure service connection>
+    appName: 'danlearn/fn-danlearn-EastUS'
+    package: $(System.ArtifactsDirectory)/**/*.zip
 # Start with a minimal pipeline that you can customize to build and deploy your code.
 # Add steps that build, run tests, deploy, and more:
 # https://aka.ms/yaml
@@ -26,7 +51,4 @@ steps:
 
 
 
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+

@@ -76,6 +76,7 @@
         "apiVersion": "2021-03-01",
         "dependsOn": 
           [
+            "[resourceId('Microsoft.Web/sites', variables('basename'))]",
             "[resourceId('Microsoft.DocumentDB/databaseAccounts/sqlDatabases', toLower(variables('cosmosDbName')), toLower(variables('databaseName')))]"
           ],
         "name": "[variables('functionName')]",
