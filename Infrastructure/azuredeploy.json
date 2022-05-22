@@ -25,63 +25,44 @@
     },
     "variables": {
         "basename": "danlearn",
-        "storageAccountName": "[concat('sa', variables('basename'), parameters('location'))]",
-        "appInsightsName": "[concat('appi-', variables('basename'),'-', parameters('location'))]",
-        "eventGridName": "[concat('evg-', variables('basename'), '-', parameters('location'))]"
+        "functionaName": "[concat('fn', variables('basename'), parameters('location'))]",
+        "cosmosDbName": "[concat('cdb-', variables('basename'), '-', parameters('location'))]",
+        "databaseName": "whatever"
     },
     "resources": [
         {
-            "type": "Microsoft.Storage/storageAccounts",
-            "apiVersion": "2021-08-01",
-            "name":  "[variables('storageAccountName')]",
-            "location": "[parameters('location')]", 
-            "kind": "StorageV2",
-            "sku": {
-                "name": "Standard_ZRS"
-            },
-            "resources": [
-                {
-                    "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
-                    "apiVersion": "2021-09-01",
-                    "name": "[concat(variables('storageAccountName'), '/default/', 'container1')]",
-                    "properties": {
-                        "publicAccess": "none"
-                    },
-                    "dependsOn": [
-                         "[resourceId('Microsoft.Storage/storageAccounts/', variables('storageAccountName'))]"
-                    ]
-                }
-            ]
+      "type": "Microsoft.DocumentDB/databaseAccounts",
+      "apiVersion": "2021-04-15",
+      "name": "[toLower(variables('cosmosDbName'))]",
+      "location": "[parameters('location')]",
+      "properties": {
+        "enableFreeTier": true,
+        "databaseAccountOfferType": "Standard",
+        "consistencyPolicy": {
+          "defaultConsistencyLevel": "Session"
         },
-        {
-            "type": "Microsoft.Insights/components",
-            "apiVersion": "2020-02-02",
-            "name": "[variables('appInsightsName')]",
-            "location": "[parameters('location')]",
-            "kind": "web"
-        }
-        {
-            "type": "Microsoft.EventGrid/topics",
-            "apiVersion": "2020-06-01",
-            "name": "[variables('eventGridName')]",
-            "location": "[parameters('location')]"
+        "locations": [
+          {
+            "locationName": "[parameters('location')]"
+          }
+        ]
+      }
+    },
+    {
+      "type": "Microsoft.DocumentDB/databaseAccounts/sqlDatabases",
+      "apiVersion": "2021-04-15",
+      "name": "[format('{0}/{1}', toLower(variables('cosmosDbName')), toLower(variables('databaseName')))]",
+      "properties": {
+        "resource": {
+          "id": "[variables('databaseName')]"
         },
-        {
-            "type": "Microsoft.EventGrid/eventSubscriptions",
-            "apiVersion": "2020-06-01",
-            "name": "BlobToQueue",
-            "properties": {
-                "destination": {
-                    "properties": {
-                        "resourceId": "[concat(resourceId('Microsoft.ServiceBus/namespaces/queues', variables('serviceBusName'), 'blobs'))]"
-                    },
-                    "endpointType": "ServiceBusQueue"
-                }
-            },
-            "dependsOn": [
-                "[resourceId('Microsoft.EventGrid/topics', variables('eventGridName'))]",
-                "[resourceId('Microsoft.ServiceBus/namespaces', variables('serviceBusName'))]"
-            ]
+        "options": {
+          "throughput": 400
         }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.DocumentDB/databaseAccounts', toLower(variables('cosmosDbName')))]"
+      ]
+    }
     ]
 }
