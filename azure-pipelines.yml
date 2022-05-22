@@ -40,7 +40,7 @@ steps:
     deploymentMode: 'Complete'
 - task: AzureFunctionApp@1 # Add this at the end of your file
   inputs:
-    azureSubscription: <Azure service connection>
+    azureSubscription: 'AzureLearningConn'
     appName: 'danlearn/fn-danlearn-EastUS'
     package: $(System.ArtifactsDirectory)/**/*.zip
 # Start with a minimal pipeline that you can customize to build and deploy your code.
