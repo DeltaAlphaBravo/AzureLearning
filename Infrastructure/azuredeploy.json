@@ -30,7 +30,7 @@
         "databaseName": "whatever"
     },
     "resources": [
-        {
+    {
       "type": "Microsoft.DocumentDB/databaseAccounts",
       "apiVersion": "2021-04-15",
       "name": "[toLower(variables('cosmosDbName'))]",
