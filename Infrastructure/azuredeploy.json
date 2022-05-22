@@ -30,39 +30,39 @@
         "databaseName": "whatever"
     },
     "resources": [
-    {
-      "type": "Microsoft.DocumentDB/databaseAccounts",
-      "apiVersion": "2021-04-15",
-      "name": "[toLower(variables('cosmosDbName'))]",
-      "location": "[parameters('location')]",
-      "properties": {
-        "enableFreeTier": true,
-        "databaseAccountOfferType": "Standard",
-        "consistencyPolicy": {
-          "defaultConsistencyLevel": "Session"
-        },
-        "locations": [
-          {
-            "locationName": "[parameters('location')]"
-          }
-        ]
-      }
-    },
-    {
-      "type": "Microsoft.DocumentDB/databaseAccounts/sqlDatabases",
-      "apiVersion": "2021-04-15",
-      "name": "[format('{0}/{1}', toLower(variables('cosmosDbName')), toLower(variables('databaseName')))]",
-      "properties": {
-        "resource": {
-          "id": "[variables('databaseName')]"
-        },
-        "options": {
-          "throughput": 400
+      {
+        "type": "Microsoft.DocumentDB/databaseAccounts",
+        "apiVersion": "2021-04-15",
+        "name": "[toLower(variables('cosmosDbName'))]",
+        "location": "[parameters('location')]",
+        "properties": {
+          "enableFreeTier": true,
+          "databaseAccountOfferType": "Standard",
+          "consistencyPolicy": {
+            "defaultConsistencyLevel": "Session"
+          },
+          "locations": [
+            {
+              "locationName": "[parameters('location')]"
+            }
+          ]
         }
       },
-      "dependsOn": [
-        "[resourceId('Microsoft.DocumentDB/databaseAccounts', toLower(variables('cosmosDbName')))]"
-      ]
-    }
+      {
+        "type": "Microsoft.DocumentDB/databaseAccounts/sqlDatabases",
+        "apiVersion": "2021-04-15",
+        "name": "[format('{0}/{1}', toLower(variables('cosmosDbName')), toLower(variables('databaseName')))]",
+        "properties": {
+          "resource": {
+            "id": "[variables('databaseName')]"
+          },
+          "options": {
+            "throughput": 400
+          }
+        },
+        "dependsOn": [
+          "[resourceId('Microsoft.DocumentDB/databaseAccounts', toLower(variables('cosmosDbName')))]"
+        ]
+      }
     ]
 }
