@@ -42,7 +42,7 @@ steps:
   inputs:
     azureSubscription: 'AzureLearningConn'
     appName: 'danlearn'
-    package: $(System.ArtifactsDirectory)/**/*.zip
+    package: '$(System.ArtifactsDirectory)/**/build$(Build.BuildId).zip'
 # Start with a minimal pipeline that you can customize to build and deploy your code.
 # Add steps that build, run tests, deploy, and more:
 # https://aka.ms/yaml
