@@ -26,7 +26,7 @@
     "variables": {
         "basename": "danlearn",
         "storageAccountName": "[concat('sa', variables('basename'), parameters('location'))]",
-        "serviceBusName": "[concat('sb-', variables('basename'),'-', parameters('location'))]",
+        "appInsightsName": "[concat('appi-', variables('basename'),'-', parameters('location'))]",
         "eventGridName": "[concat('evg-', variables('basename'), '-', parameters('location'))]"
     },
     "resources": [
@@ -54,22 +54,12 @@
             ]
         },
         {
-            "type": "Microsoft.ServiceBus/namespaces",
-            "apiVersion": "2021-11-01",
-            "name": "[variables('serviceBusName')]",
-            "location": "[parameters('location')]", 
-            "properties": {
-                
-            }
-        },
-        {
-            "type": "Microsoft.ServiceBus/namespaces/queues",
-            "apiVersion": "2021-11-01",
-            "name": "[concat(variables('serviceBusName'), '/blobs')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.ServiceBus/namespaces', variables('serviceBusName'))]"
-            ]
-        },
+            "type": "Microsoft.Insights/components",
+            "apiVersion": "2020-02-02",
+            "name": "[variables('appInsightsName')]",
+            "location": "[parameters('location')]",
+            "kind": "web"
+        }
         {
             "type": "Microsoft.EventGrid/topics",
             "apiVersion": "2020-06-01",
