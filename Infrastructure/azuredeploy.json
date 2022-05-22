@@ -68,7 +68,7 @@
         "type": "Microsoft.Web/sites",
         "apiVersion": "2021-03-01",
         "location": "East US",
-        "kind": "web",
+        "kind": "functionapp",
         "name": "[variables('basename')]",
         "properties": {
           
