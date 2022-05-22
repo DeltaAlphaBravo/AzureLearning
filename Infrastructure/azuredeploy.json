@@ -69,7 +69,10 @@
         "apiVersion": "2021-03-01",
         "location": "East US",
         "kind": "web",
-        "name": "[variables('basename')]"
+        "name": "[variables('basename')]",
+        "properties": {
+          
+        }
       },
       {
         "type": "Microsoft.Web/sites/functions",
