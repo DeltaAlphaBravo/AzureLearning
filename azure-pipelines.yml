@@ -14,7 +14,7 @@ steps:
     subscriptionId: 'c47b44de-21a0-4fdd-9cd8-cb9fa9db4bca'
     action: 'Create Or Update Resource Group'
     resourceGroupName: 'dan-rg-danlearn'
-    location: 'East US'
+    location: 'Central US'
     templateLocation: 'Linked artifact'
     csmFile: './Infrastructure/azuredeploy.json'
     deploymentMode: 'Complete'
