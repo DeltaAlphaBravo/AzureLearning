@@ -37,7 +37,6 @@ steps:
     location: 'East US'
     templateLocation: 'Linked artifact'
     csmFile: './Infrastructure/azuredeploy.json'
-    package: '$(System.DefaultWorkingDirectory)/build$(Build.BuildId).zip'
     deploymentMode: 'Complete'
 - task: AzureFunctionApp@1 # Add this at the end of your file
   inputs:
