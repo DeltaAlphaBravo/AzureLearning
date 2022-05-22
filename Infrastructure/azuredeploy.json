@@ -25,7 +25,7 @@
     },
     "variables": {
         "basename": "danlearn",
-        "functionaName": "[concat('fn', variables('basename'), parameters('location'))]",
+        "functionName": "[concat('danlearn/', 'fn', variables('basename'), parameters('location'))]",
         "cosmosDbName": "[concat('cdb-', variables('basename'), '-', parameters('location'))]",
         "databaseName": "whatever"
     },
@@ -63,6 +63,19 @@
         "dependsOn": [
           "[resourceId('Microsoft.DocumentDB/databaseAccounts', toLower(variables('cosmosDbName')))]"
         ]
+      },
+      {
+        "type": "Microsoft.Web/sites/functions",
+        "apiVersion": "2021-03-01",
+        "dependsOn": 
+          [
+            "[resourceId('Microsoft.DocumentDB/databaseAccounts/sqlDatabases', toLower(variables('cosmosDbName')), toLower(variables('databaseName')))]"
+          ],
+        "name": "[variables('functionName')]",
+        "location": "East US",
+        "properties": {
+          
+        }
       }
     ]
 }
